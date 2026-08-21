@@ -1,4 +1,4 @@
-# Listful — Voice Command Shopping Assistant
+# voice command shopping web application
 
 A voice-driven shopping list: speak or type a command, a Spring Boot API
 parses the intent and updates the list, and the page shows smart
@@ -42,7 +42,7 @@ two lines to match your local MySQL login:
 
 ```properties
 spring.datasource.username=root
-spring.datasource.password=your_mysql_password
+spring.datasource.password=123456
 ```
 
 You don't need to manually create the `shoppingdb` database — the
@@ -64,15 +64,6 @@ Then open:
 http://localhost:8080
 ```
 
-### Don't have MySQL installed yet / just want to try it quickly?
-
-Run with the H2 in-memory profile instead — no install required, but data
-resets every restart:
-
-```
-mvn spring-boot:run -Dspring-boot.run.profiles=h2
-```
-
 ### Running in IntelliJ IDEA
 
 1. File → Open → select the `backend/` folder (the one with `pom.xml`)
@@ -81,19 +72,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=h2
 4. Right-click `VoiceShoppingAssistantApplication.java` → Run
 5. Open `http://localhost:8080` in your browser
 
-To run with the H2 fallback profile in IntelliJ instead: **Run → Edit
-Configurations** → select the app's run configuration → under "Active
-profiles" (or "Program arguments", depending on IntelliJ version) put `h2`.
-
-> **Note on this build environment:** I wrote and reviewed all backend
-> code by hand and compiled the Java sources against a real JDK 25 with
-> `javac --release 25` to confirm there are no language-level issues. I
-> could not run `mvn spring-boot:run` end-to-end in the sandbox I built
-> this in, since it has no network access to Maven Central. Run it
-> locally as your first real build — if anything doesn't compile, share
-> the error and I'll fix it.
-
-## Approach (≈200 words)
+## Approach 
 
 I split the system into two clean layers that now share one server.
 Spring Boot serves the static frontend directly from
@@ -150,15 +129,3 @@ entirely on a laptop.
 - **Loading skeleton** — the list shows a shimmer placeholder while the initial fetch is in flight
 - **Waveform + ripple mic** — animated feedback while listening, with `prefers-reduced-motion` respected throughout
 
-## Switching to a different database (optional)
-
-MySQL is the default now. To go back to zero-install H2 for quick local
-testing, use the `h2` Spring profile (see "Running it" above) — no code
-or config changes needed, it's already wired up in
-`application-h2.properties`.
-
-## What's not included (out of scope for 8 hours)
-
-- Cloud hosting/deployment (runs locally; any of AWS/Firebase/Render would work with no code changes — the static/ folder deploys as-is)
-- A trained ML recommendation model (suggestions are rule/history-based instead)
-- True translation of non-English speech to English item names (the browser transcribes in the selected language; item names are stored as spoken)
